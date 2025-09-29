@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable } from "@nestjs/common"
 import { Cron } from "@nestjs/schedule"
-import { PrismaService } from "src/prisma/prisma.service"
+import { PrismaService } from "../../prisma/prisma.service"
 
 @Injectable()
 export class CleanupService {
