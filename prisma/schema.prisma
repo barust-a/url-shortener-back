@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -17,7 +16,7 @@ datasource db {
 
 model ShortenedUrl {
   id         String   @id 
-  url        String
+  url        String   @unique
   createdAt  DateTime @default(now())
   expireAt   DateTime @default(dbgenerated("(NOW() + interval '14 days')")) // Postgres only
   clicks     Int      @default(0)

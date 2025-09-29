@@ -6,13 +6,14 @@ import { Injectable } from "@nestjs/common"
 import { nanoid } from "nanoid"
 import { PrismaService } from "src/prisma/prisma.service"
 
+const baseUrl = "localhost"
+
 @Injectable()
 export class UrlShortenerService {
   constructor(private prisma: PrismaService) {}
 
   async createShortUrl(url: string): Promise<string> {
     const id = nanoid()
-    const baseUrl = "localhost"
 
     await this.prisma.shortenedUrl.create({
       data: {
@@ -24,27 +25,32 @@ export class UrlShortenerService {
     return `${baseUrl}/${id}`
   }
 
-  async getLongUrlFromId(id: string): Promise<string | null> {
+  async getLongUrlFromId(id: string): Promise<string | undefined> {
     const exitingUrl = await this.prisma.shortenedUrl.findUnique({
       where: { id },
     })
     console.log("🚀 ~ UrlShortenerService ~ getShortUrl ~ url:", exitingUrl)
-    return exitingUrl
+    if (!exitingUrl?.url) {
+      throw new Error(`id : ${id} do not exist `)
+    }
+    return exitingUrl?.url
   }
 
   // used to avoid short url duplication
-  async getShortUrlFromLongUrl(url: string): Promise<string | null> {
+  async getShortUrlFromLongUrl(url: string): Promise<string | undefined> {
     const exitingUrl = await this.prisma.shortenedUrl.findUnique({
       where: { url },
     })
+
     console.log("🚀 ~ UrlShortenerService ~ getShortUrl ~ url:", url)
-    return exitingUrl
+    const shortUrl = exitingUrl?.id ? `${baseUrl}/${exitingUrl?.id}` : undefined
+    return shortUrl
   }
 
   async incrementClicks(id: string): Promise<void> {
     await this.prisma.shortenedUrl.update({
       where: { id },
-      data: { clickCounter: { increment: 1 } },
+      data: { clicks: { increment: 1 } },
     })
   }
 }
