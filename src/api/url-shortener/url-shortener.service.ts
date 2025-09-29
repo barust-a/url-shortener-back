@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import { nanoid } from "nanoid"
 import { PrismaService } from "src/prisma/prisma.service"
 
-const baseUrl = "localhost"
+const baseUrl = "http://localhost:3000"
 
 @Injectable()
 export class UrlShortenerService {
@@ -25,15 +25,14 @@ export class UrlShortenerService {
     return `${baseUrl}/${id}`
   }
 
-  async getLongUrlFromId(id: string): Promise<string | undefined> {
+  async getLongUrlFromId(id: string): Promise<string> {
     const exitingUrl = await this.prisma.shortenedUrl.findUnique({
       where: { id },
     })
-    console.log("🚀 ~ UrlShortenerService ~ getShortUrl ~ url:", exitingUrl)
     if (!exitingUrl?.url) {
-      throw new Error(`id : ${id} do not exist `)
+      throw new NotFoundException(`id : ${id} do not exist `)
     }
-    return exitingUrl?.url
+    return exitingUrl.url
   }
 
   // used to avoid short url duplication

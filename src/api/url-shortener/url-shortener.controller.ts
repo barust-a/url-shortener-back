@@ -13,7 +13,9 @@ export class UrlShortenerController {
 
   @Get(":id")
   async getLongUrlFromId(@Param("id") id: string) {
+    const url = await this.urlService.getLongUrlFromId(id)
+
     await this.urlService.incrementClicks(id)
-    return await this.urlService.getLongUrlFromId(id)
+    return url
   }
 }
