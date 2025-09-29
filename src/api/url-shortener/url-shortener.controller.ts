@@ -1,4 +1,19 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body } from "@nestjs/common"
+import { UrlShortenerService } from "./url-shortener.service"
 
-@Controller('url-shortener')
-export class UrlShortenerController {}
+@Controller()
+export class UrlShortenerController {
+  constructor(private readonly urlService: UrlShortenerService) {}
+
+  @Post()
+  async createShortUrl(@Body("url") url: string) {
+    const existingUrl = await this.urlService.getShortUrlFromLongUrl(url)
+    return existingUrl || await this.urlService.createShortUrl(url))
+  }
+
+  @Get(":id")
+  async getLongUrlFromId(@Param("id") id: string) {
+    await this.urlService.incrementClicks(id)
+    return await this.urlService.getLongUrlFromId(id)
+  }
+}
