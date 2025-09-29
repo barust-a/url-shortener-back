@@ -25,6 +25,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/schedule": "^6.0.1",
     "@prisma/client": "^6.16.2",
+    "nanoid": "^5.1.6",
     "prisma": "^6.16.2",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
