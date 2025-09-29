@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { CleanupService } from './cleanup.service';
+import { Module } from "@nestjs/common"
+import { CleanupService } from "./cleanup.service"
 
 @Module({
-  providers: [CleanupService]
+  providers: [CleanupService],
 })
 export class CleanupModule {}

@@ -8,7 +8,7 @@ export class UrlShortenerController {
   @Post()
   async createShortUrl(@Body("url") url: string) {
     const existingUrl = await this.urlService.getShortUrlFromLongUrl(url)
-    return existingUrl || await this.urlService.createShortUrl(url))
+    return existingUrl || (await this.urlService.createShortUrl(url))
   }
 
   @Get(":id")
